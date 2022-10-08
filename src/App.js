@@ -1,8 +1,13 @@
-import React, { useRef, useEffect } from "react";
+import React, {
+  useMemo,
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+} from "react";
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList.js";
-import { useMemo, useState } from "react";
 
 function App() {
   const [data, setData] = useState([]);
@@ -33,7 +38,7 @@ function App() {
     getData();
   }, []);
 
-  const onCreate = (author, content, emotion) => {
+  const onCreate = useCallback((author, content, emotion) => {
     const created_date = new Date().getTime();
     const newItem = {
       author,
@@ -43,8 +48,8 @@ function App() {
       emotion,
     };
     dataId.current += 1;
-    setData([newItem, ...data]);
-  };
+    setData((data) => [newItem, ...data]); // setData의 인자로 함수를 전달하게되면 data를 보고 상태변화
+  }, []); //빈배열을 주고 하나 추가하면 새로운 하나로만 생성
 
   const onRemove = (targetId) => {
     const newDiaryList = data.filter((it) => it.id !== targetId);
