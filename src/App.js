@@ -51,18 +51,17 @@ function App() {
     setData((data) => [newItem, ...data]); // setData의 인자로 함수를 전달하게되면 data를 보고 상태변화
   }, []); //빈배열을 주고 하나 추가하면 새로운 하나로만 생성
 
-  const onRemove = (targetId) => {
-    const newDiaryList = data.filter((it) => it.id !== targetId);
-    setData(newDiaryList);
-  };
+  const onRemove = useCallback((targetId) => {
+    setData((data) => data.filter((it) => it.id !== targetId));
+  }, []);
 
-  const onEdit = (targetId, newcontent) => {
-    setData(
+  const onEdit = useCallback((targetId, newcontent) => {
+    setData((data) =>
       data.map((it) =>
         it.id === targetId ? { ...it, content: newcontent } : it
       )
     );
-  };
+  }, []);
 
   const getDiaryAnalysis = useMemo(() => {
     const goodCount = data.filter((it) => it.emotion >= 3).length;
